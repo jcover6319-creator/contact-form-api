@@ -34,13 +34,6 @@ app.post("/api/contact", async (req, res) => {
   }
 
 
-  try {
-
-
-const express = require("express");
-const cors = require("cors");
-const nodemailer = require("nodemailer");
-
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
