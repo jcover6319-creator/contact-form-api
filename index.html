@@ -29,23 +29,28 @@
       };
 
       try {
-        const res = await fetch("http://localhost:3000/api/contact", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
+  const res = await fetch("https://contact-form-api-production-66ac.up.railway.app/api/contact", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
 
-        const result = await res.json();
-        console.log(result);
+  const result = await res.json();
 
-        document.getElementById("response").innerText = result.message;
-      } catch (err) {
-        console.error("ERROR:", err);
-      }
-    });
-  </script>
+  if (!res.ok) {
+    throw new Error(result.error || "Server error");
+  }
+
+  document.getElementById("response").innerText = result.message;
+
+} catch (error) {
+  console.error("ERROR:", error);
+  document.getElementById("response").innerText = "Failed to send message ❌";
+}
+});
+</script>
 
 </body>
 </html>
