@@ -29,7 +29,8 @@
       };
 
       try {
-  const res = await fetch("https://contact-form-api-production-66ac.up.railway.app/api/contact", {
+
+  const res = await fetch("https://contact-form-api-production-2c85.up.railway.app/api/contact", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -46,8 +47,11 @@
   document.getElementById("response").innerText = result.message;
 
 } catch (error) {
+
   console.error("ERROR:", error);
+
   document.getElementById("response").innerText = "Failed to send message ❌";
+
 }
 });
 </script>

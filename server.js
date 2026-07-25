@@ -1,6 +1,8 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
-const nodemailer = require("nodemailer");
+const brevo = require("@getbrevo/brevo");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -34,36 +36,45 @@ app.post("/api/contact", async (req, res) => {
   }
 
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+  try {
 
+    const apiInstance = new brevo.TransactionalEmailsApi();
 
-    const mailOptions = {
-  from: '"🔥1800🔥" <jcover6319@gmail.com>',
-  replyTo: email,
-  to: "jcover6319@atomicmail.io",
-  subject: "📧New Contact Form Message📧",
+apiInstance.setApiKey(
+  brevo.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY
+);
 
-  text: `
-Name: ${name}
+const sendSmtpEmail = new brevo.SendSmtpEmail();
 
-Email: ${email}
-
-Message:
-${message}
-`
+sendSmtpEmail.sender = {
+  email: process.env.FROM_EMAIL,
+  name: "🔥1800🔥"
 };
 
+sendSmtpEmail.to = [
+  {
+    email: process.env.TO_EMAIL
+  }
+];
 
-    await transporter.sendMail(mailOptions);
+sendSmtpEmail.subject = "📧New Contact Form Message📧";
 
+sendSmtpEmail.htmlContent = `
+<h2>New Contact Message</h2>
 
-    console.log("✅ Email sent successfully");
+<p><strong>Name:</strong> ${name}</p>
+
+<p><strong>Email:</strong> ${email}</p>
+
+<p><strong>Message:</strong></p>
+
+<p>${message}</p>
+`;
+
+await apiInstance.sendTransacEmail(sendSmtpEmail);
+
+console.log("✅ Email sent successfully");
 
 
     res.json({
