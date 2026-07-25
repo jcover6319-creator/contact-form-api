@@ -36,7 +36,10 @@ app.post("/api/contact", async (req, res) => {
 
   try {
 
-    require("dotenv").config();
+
+const express = require("express");
+const cors = require("cors");
+const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
